@@ -34,3 +34,15 @@ sudo nginx -t
 sudo systemctl restart nginx
 sudo ufw allow from 192.168.10.0/24 to any port 8888
 ```
+
+### Login
+
+```bash
+brew install argocd
+argocd admin initial-password -n argocd
+argocd login <ARGOCD_SERVER>
+# use admin as user and above password
+
+# change the password
+argocd account update-password
+```
