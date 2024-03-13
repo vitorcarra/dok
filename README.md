@@ -3,6 +3,6 @@
 ## Infrastructure Tools
 
 - [x] Argocd
-- [ ] Airflow 2
+- [x] Airflow 2
 - [ ] Datahub
 - [ ] minio
