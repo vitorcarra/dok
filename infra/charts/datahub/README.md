@@ -9,8 +9,8 @@ This chart is used to deploy Datahub on a Kubernetes cluster. [[here](https://da
 To install the chart with the release name `datahub`:
 
 ```bash
-kubectl create secret generic mysql-secrets --from-literal=mysql-root-password=datahub
-kubectl create secret generic neo4j-secrets --from-literal=neo4j-password=datahub
+kubectl create secret generic mysql-secrets --from-literal=mysql-root-password=datahub -n datahub
+kubectl create secret generic neo4j-secrets --from-literal=neo4j-password=datahub -n datahub
 
 helm repo add datahub https://helm.datahubproject.io/
 ```
