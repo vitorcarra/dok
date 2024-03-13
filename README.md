@@ -5,4 +5,4 @@
 - [x] Argocd
 - [x] Airflow 2
 - [ ] Datahub
-- [ ] minio
+- [x] minio
