@@ -555,9 +555,9 @@ global:
 
   kafka:
     bootstrap:
-      server: datahub-prerequisites-kafka:9092"
+      server: "datahub-prerequisites-kafka:9092"
     zookeeper:
-      server: datahub-prerequisites-zookeeper:2181"
+      server: "datahub-prerequisites-zookeeper:2181"
     # This section defines the names for the kafka topics that DataHub depends on, at a global level. Do not override this config
     # at a sub-chart level.
     topics:
@@ -595,7 +595,7 @@ global:
       #   registry: datahub
 
   neo4j:
-    host: datahub-prerequisites-neo4j:7474"
+    host: "datahub-prerequisites-neo4j:7474"
     uri: "bolt://prerequisites-neo4j"
     username: "neo4j"
     password:
