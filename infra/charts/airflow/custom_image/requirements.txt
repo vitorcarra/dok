@@ -1,0 +1,4 @@
+acryl-datahub-airflow-plugin[plugin-v2]
+apache-airflow-providers-dbt-cloud
+asgiref
+aiohttp
