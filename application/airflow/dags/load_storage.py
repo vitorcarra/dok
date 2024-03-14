@@ -1,7 +1,7 @@
+from airflow.providers.amazon.aws.transfers.http_to_s3 import HttpToS3Operator
 from datetime import datetime
 from airflow import DAG
-from airflow.operators.http_operator import SimpleHttpOperator
-from airflow.providers.amazon.aws.operators.s3_file_transform_operator import S3FileTransformOperator
+from airflow.operators.dummy_operator import DummyOperator
 
 default_args = {
     'owner': 'airflow',
@@ -9,46 +9,29 @@ default_args = {
 }
 
 with DAG('download_and_save_to_s3', default_args=default_args, schedule_interval=None) as dag:
-    download_file = SimpleHttpOperator(
-        task_id='download_legislaturas',
-        method='GET',
-        http_conn_id='http_conn',
-        endpoint='https://dadosabertos.camara.leg.br/arquivos/legislaturas/csv/legislaturas.csv',
-        headers={'Content-Type': 'application/octet-stream'},
-        response_check=lambda response: True if response.status_code == 200 else False,
-        log_response=True,
-        xcom_push=True
-    )
 
-    save_to_s3 = S3FileTransformOperator(
-        task_id='load_legislaturas_to_s3',
-        source_s3_key="{{ task_instance.xcom_pull('download_file') }}",
-        dest_s3_key='s3://your-bucket/path/to/save/file',
-        transform_script=None,
-        replace=False,
+    start = DummyOperator(task_id='start')
+    end = DummyOperator(task_id='end')
+
+    download_and_save_legislaturas = HttpToS3Operator(
+        task_id='download_and_save_legislaturas',
+        http_conn_id='http_conn',
+        path='https://dadosabertos.camara.leg.br/arquivos/legislaturas/csv/legislaturas.csv',
+        s3_bucket='your-bucket',
+        s3_key='path/to/save/file/legislaturas.csv',
         aws_conn_id='aws_s3_conn'
     )
 
-
-    download_file_2 = SimpleHttpOperator(
-        task_id='download_deputados',
-        method='GET',
+    download_and_save_deputados = HttpToS3Operator(
+        task_id='download_and_save_deputados',
         http_conn_id='http_conn',
-        endpoint='https://dadosabertos.camara.leg.br/arquivos/deputados/csv/deputados.csv',
-        headers={'Content-Type': 'application/octet-stream'},
-        response_check=lambda response: True if response.status_code == 200 else False,
-        log_response=True,
-        xcom_push=True
-    )
-
-    save_to_s3_2 = S3FileTransformOperator(
-        task_id='load_legislaturas_to_s3',
-        source_s3_key="{{ task_instance.xcom_pull('download_file_2') }}",
-        dest_s3_key='s3://your-bucket/path/to/save/file',
-        transform_script=None,
-        replace=False,
+        path='https://dadosabertos.camara.leg.br/arquivos/deputados/csv/deputados.csv',
+        s3_bucket='your-bucket',
+        s3_key='path/to/save/file/deputados.csv',
         aws_conn_id='aws_s3_conn'
     )
 
-    download_file >> save_to_s3
-    download_file_2 >> save_to_s3_2
+    start >> download_and_save_legislaturas
+    start >> download_and_save_deputados
+    download_and_save_legislaturas >> end
+    download_and_save_deputados >> end
