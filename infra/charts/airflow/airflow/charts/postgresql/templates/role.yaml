@@ -15,7 +15,8 @@ metadata:
   {{- end }}
 # yamllint disable rule:indentation
 rules:
-  {{- if and (include "common.capabilities.psp.supported" .) .Values.psp.create }}
+  {{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
+  {{- if and $pspAvailable .Values.psp.create }}
   - apiGroups:
       - 'policy'
     resources:

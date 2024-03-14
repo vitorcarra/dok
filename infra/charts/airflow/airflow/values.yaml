@@ -68,13 +68,13 @@ airflowHome: /opt/airflow
 defaultAirflowRepository: vitorcarra/airflow2-custom
 
 # Default airflow tag to deploy
-defaultAirflowTag: "2.0.2"
+defaultAirflowTag: "2.0.3"
 
 # Default airflow digest. If specified, it takes precedence over tag
 defaultAirflowDigest: ~
 
 # Airflow version (Used to make some decisions based on Airflow Version being deployed)
-airflowVersion: "2.6.3"
+airflowVersion: "2.7.3"
 
 # Images
 images:
@@ -105,23 +105,23 @@ images:
     pullPolicy: Always
   statsd:
     repository: quay.io/prometheus/statsd-exporter
-    tag: v0.26.0
+    tag: v0.22.8
     pullPolicy: IfNotPresent
   redis:
     repository: redis
-    tag: 7-bookworm
+    tag: 7-bullseye
     pullPolicy: IfNotPresent
   pgbouncer:
     repository: apache/airflow
-    tag: airflow-pgbouncer-2024.01.19-1.21.0
+    tag: airflow-pgbouncer-2023.02.24-1.16.1
     pullPolicy: IfNotPresent
   pgbouncerExporter:
     repository: apache/airflow
-    tag: airflow-pgbouncer-exporter-2024.01.19-0.16.0
+    tag: airflow-pgbouncer-exporter-2023.02.21-0.14.0
     pullPolicy: IfNotPresent
   gitSync:
     repository: registry.k8s.io/git-sync/git-sync
-    tag: v4.1.0
+    tag: v3.6.9
     pullPolicy: IfNotPresent
 
 # Select certain nodes for airflow pods.
@@ -592,28 +592,6 @@ workers:
     # This configuration will be ignored if PGBouncer is not enabled
     usePgbouncer: true
 
-  # Allow HPA (KEDA must be disabled).
-  hpa:
-    enabled: false
-
-    # Minimum number of workers created by HPA
-    minReplicaCount: 0
-
-    # Maximum number of workers created by HPA
-    maxReplicaCount: 5
-
-    # Specifications for which to use to calculate the desired replica count
-    metrics:
-      - type: Resource
-        resource:
-          name: cpu
-          target:
-            type: Utilization
-            averageUtilization: 80
-
-    # Scaling behavior of the target in both Up and Down directions
-    behavior: {}
-
   persistence:
     # Enable persistent volumes
     enabled: true
@@ -648,18 +626,6 @@ workers:
       container: {}
     # container level lifecycle hooks
     containerLifecycleHooks: {}
-
-  kerberosInitContainer:
-    # Enable kerberos init container
-    enabled: false
-    resources: {}
-    #  limits:
-    #   cpu: 100m
-    #   memory: 128Mi
-    #  requests:
-    #   cpu: 100m
-    #   memory: 128Mi
-
 
   resources: {}
   #  limits:
@@ -763,34 +729,8 @@ workers:
 
   env: []
 
-  volumeClaimTemplates: []
-  # Additional volumeClaimTemplates needed.
-  # Comment out the above and uncomment the section below to enable it.
-  # Add more as needed
-  # Make sure to mount it under extraVolumeMounts.
-  # volumeClaimTemplates:
-  #   - metadata:
-  #       name: data-volume-1
-  #     spec:
-  #       storageClassName: "storage-class-1"
-  #       accessModes:
-  #         - "ReadWriteOnce"
-  #       resources:
-  #         requests:
-  #           storage: "10Gi"
-  #   - metadata:
-  #       name: data-volume-2
-  #     spec:
-  #       storageClassName: "storage-class-2"
-  #       accessModes:
-  #         - "ReadWriteOnce"
-  #       resources:
-  #         requests:
-  #           storage: "20Gi"
-
 # Airflow scheduler settings
 scheduler:
-  enabled: true
   #  hostAliases for the scheduler pod
   hostAliases: []
   #  - ip: "127.0.0.1"
@@ -1050,8 +990,8 @@ createUserJob:
   topologySpreadConstraints: []
   # In case you need to disable the helm hooks that create the jobs after install.
   # Disable this if you are using ArgoCD for example
-  useHelmHooks: false
-  applyCustomEnv: false
+  useHelmHooks: true
+  applyCustomEnv: true
 
   env: []
 
@@ -1085,9 +1025,6 @@ migrateDatabaseJob:
   annotations: {}
   # jobAnnotations are annotations on the database migration job
   jobAnnotations: {}
-
-  # Labels specific to migrate database job objects and pods
-  labels: {}
 
   # When not set, the values defined in the global securityContext will be used
   securityContext: {}
@@ -1149,12 +1086,11 @@ migrateDatabaseJob:
   topologySpreadConstraints: []
   # In case you need to disable the helm hooks that create the jobs after install.
   # Disable this if you are using ArgoCD for example
-  useHelmHooks: false
-  applyCustomEnv: false
+  useHelmHooks: true
+  applyCustomEnv: true
 
 # Airflow webserver settings
 webserver:
-  enabled: true
   # Add custom annotations to the webserver configmap
   configMapAnnotations: {}
   #  hostAliases for the webserver pod
@@ -1320,6 +1256,11 @@ webserver:
     #     targetPort: 8888
     # If you have a public IP, set NodePort to set an external port.
     # Service type must be 'NodePort':
+    # ports:
+    #   - name: airflow-ui
+    #     port: 8080
+    #     targetPort: 8080
+    #     nodePort: 31151
     ports:
       - name: airflow-ui
         port: 8080
@@ -1693,16 +1634,11 @@ dagProcessor:
     #  requests:
     #   cpu: 100m
     #   memory: 128Mi
-    securityContexts:
-      container: {}
 
   waitForMigrations:
     # Whether to create init container to wait for db migrations
     enabled: true
     env: []
-    # Detailed default security context for waitForMigrations for container level
-    securityContexts:
-      container: {}
 
   env: []
 
@@ -1711,19 +1647,6 @@ flower:
   # Enable flower.
   # If True, and using CeleryExecutor/CeleryKubernetesExecutor, will deploy flower app.
   enabled: false
-
-  livenessProbe:
-    initialDelaySeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 10
-    periodSeconds: 5
-
-  readinessProbe:
-    initialDelaySeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 10
-    periodSeconds: 5
-
   # Max number of old replicasets to retain
   revisionHistoryLimit: ~
 
@@ -1935,7 +1858,7 @@ pgbouncer:
   command: ["pgbouncer", "-u", "nobody", "/etc/pgbouncer/pgbouncer.ini"]
   # Args to use for PgBouncer(templated).
   args: ~
-  auth_type: scram-sha-256
+  auth_type: md5
   auth_file: /etc/pgbouncer/users.txt
 
   # annotations to be added to the PgBouncer deployment
@@ -2148,11 +2071,6 @@ redis:
     # Annotations to add to redis volumes
     annotations: {}
 
-  # Configuration for empty dir volume (if redis.persistence.enabled == false)
-  # emptyDirConfig:
-  #   sizeLimit: 1Gi
-  #   medium: Memory
-
   resources: {}
   #  limits:
   #   cpu: 100m
@@ -2178,7 +2096,6 @@ redis:
   affinity: {}
   tolerations: []
   topologySpreadConstraints: []
-  priorityClassName: ~
 
   # Set to 0 for backwards-compatiblity
   uid: 0
@@ -2218,7 +2135,6 @@ elasticsearch:
   # Or an object representing the connection
   # Example:
   # connection:
-  #   scheme: ~
   #   user: ~
   #   pass: ~
   #   host: ~
@@ -2317,6 +2233,8 @@ cleanup:
 # Not recommended for production
 postgresql:
   enabled: true
+  image:
+    tag: "11"
   auth:
     enablePostgresUser: true
     postgresPassword: postgres
@@ -2349,7 +2267,7 @@ config:
     statsd_on: '{{ ternary "True" "False" .Values.statsd.enabled }}'
     statsd_port: 9125
     statsd_prefix: airflow
-    statsd_host: '{{ printf "%s-statsd" (include "airflow.fullname" .) }}'
+    statsd_host: '{{ printf "%s-statsd" .Release.Name }}'
   webserver:
     enable_proxy_fix: 'True'
     # For Airflow 1.10
@@ -2363,7 +2281,7 @@ config:
     statsd_on: '{{ ternary "True" "False" .Values.statsd.enabled }}'
     statsd_port: 9125
     statsd_prefix: airflow
-    statsd_host: '{{ printf "%s-statsd" (include "airflow.fullname" .) }}'
+    statsd_host: '{{ printf "%s-statsd" .Release.Name }}'
     # `run_duration` included for Airflow 1.10 backward compatibility; removed in 2.0.
     run_duration: 41460
   elasticsearch:
@@ -2433,9 +2351,6 @@ podTemplate: ~
 
 # Git sync
 dags:
-  # Where dags volume will be mounted. Works for both persistence and gitSync.
-  # If not specified, dags mount path will be set to $AIRFLOW_HOME/dags
-  mountPath: ~
   persistence:
     # Annotations for dags PVC
     annotations: {}
@@ -2476,12 +2391,8 @@ dags:
     #   metadata:
     #     name: git-credentials
     #   data:
-    #     # For git-sync v3
     #     GIT_SYNC_USERNAME: <base64_encoded_git_username>
     #     GIT_SYNC_PASSWORD: <base64_encoded_git_password>
-    #     # For git-sync v4
-    #     GITSYNC_USERNAME: <base64_encoded_git_username>
-    #     GITSYNC_PASSWORD: <base64_encoded_git_password>
     # and specify the name of the secret below
     #
     # credentialsSecret: git-credentials
@@ -2510,11 +2421,7 @@ dags:
     # interval between git sync attempts in seconds
     # high values are more likely to cause DAGs to become out of sync between different components
     # low values cause more traffic to the remote git repository
-    # Go-style duration string (e.g. "100ms" or "0.1s" = 100ms).
-    # For backwards compatibility, wait will be used if it is specified.
-    period: 5s
-    wait: ~
-
+    wait: 5
     containerName: git-sync
     uid: 65533
 
@@ -2540,11 +2447,6 @@ dags:
     # - name: ""
     #   value: ""
 
-    # Configuration for empty dir volume
-    # emptyDirConfig:
-    #   sizeLimit: 1Gi
-    #   medium: Memory
-
     resources: {}
     #  limits:
     #   cpu: 100m
@@ -2554,11 +2456,6 @@ dags:
     #   memory: 128Mi
 
 logs:
-  # Configuration for empty dir volume (if logs.persistence.enabled == false)
-  # emptyDirConfig:
-  #   sizeLimit: 1Gi
-  #   medium: Memory
-
   persistence:
     # Enable persistent volume for storing logs
     enabled: false
