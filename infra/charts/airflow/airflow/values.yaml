@@ -2334,7 +2334,11 @@ postgresql:
 # Do not set config containing secrets via plain text values, use Env Var or k8s secret object
 # yamllint disable rule:line-length
 config:
+  datahub:
+    enabled: 'True'
+    conn_id: datahub_rest_default
   core:
+    lazy_load_plugins: 'False'
     dags_folder: '{{ include "airflow_dags" . }}'
     # This is ignored when used with the official Docker image
     load_examples: 'False'
