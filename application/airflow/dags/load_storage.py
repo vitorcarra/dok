@@ -37,7 +37,8 @@ with DAG('download_and_save_to_s3', default_args=default_args, schedule_interval
         http_conn_id=conn_id_name,
         method='GET',
         endpoint='arquivos/legislaturas/csv/legislaturas.csv',
-        s3_key='s3://landing/legislaturas.csv',
+        bucket='landing',
+        s3_key='legislaturas.csv',
         aws_conn_id='aws_s3_conn'
     )
 
@@ -46,7 +47,8 @@ with DAG('download_and_save_to_s3', default_args=default_args, schedule_interval
         http_conn_id=conn_id_name,
         method='GET',
         endpoint='arquivos/deputados/csv/deputados.csv',
-        s3_key='s3://landing/deputados.csv',
+        bucket='landing',
+        s3_key='deputados.csv',
         aws_conn_id='aws_s3_conn'
     )
 
