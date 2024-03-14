@@ -68,7 +68,7 @@ airflowHome: /opt/airflow
 defaultAirflowRepository: vitorcarra/airflow2-custom
 
 # Default airflow tag to deploy
-defaultAirflowTag: "latest"
+defaultAirflowTag: "2.0.0"
 
 # Default airflow digest. If specified, it takes precedence over tag
 defaultAirflowDigest: ~
