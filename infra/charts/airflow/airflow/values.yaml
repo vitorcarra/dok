@@ -422,7 +422,7 @@ data:
 
 # Fernet key settings
 # Note: fernetKey can only be set during install, not upgrade
-fernetKey: b4fb68b7e74273d5bbcc8e0313b51c74
+fernetKey: cgCakCS4bypdLvG2mRAqwQGNPq2LkW4BtE-37jdVaZk=
 fernetKeySecretName: ~
 
 # Flask secret key for Airflow Webserver: `[webserver] secret_key` in airflow.cfg
