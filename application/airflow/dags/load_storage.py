@@ -17,7 +17,7 @@ def create_connection(conn_id_name: str):
     conn = Connection(
         conn_id=conn_id_name,
         conn_type="http",
-        host="https://dadosabertos.camara.leg.br",
+        host="http://dadosabertos.camara.leg.br",
         port=80,
     )
     session = settings.Session()
