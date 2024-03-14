@@ -1,9 +1,9 @@
 acryl-datahub-airflow-plugin[plugin-v2]
 apache-airflow-providers-common-sql
 attrs
+openlineage-airflow
 openlineage-integration-common
 openlineage-python
 apache-airflow-providers-dbt-cloud
-apache-airflow-providers-openlineage
 asgiref
 aiohttp
