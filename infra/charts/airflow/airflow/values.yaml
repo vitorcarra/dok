@@ -68,7 +68,7 @@ airflowHome: /opt/airflow
 defaultAirflowRepository: vitorcarra/airflow2-custom
 
 # Default airflow tag to deploy
-defaultAirflowTag: "2.0.0"
+defaultAirflowTag: "2.0.1"
 
 # Default airflow digest. If specified, it takes precedence over tag
 defaultAirflowDigest: ~
@@ -83,7 +83,7 @@ images:
     tag: ~
     # Specifying digest takes precedence over tag.
     digest: ~
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
   # To avoid images with user code, you can turn this to 'true' and
   # all the 'run-airflow-migrations' and 'wait-for-airflow-migrations' containers/jobs
   # will use the images from 'defaultAirflowRepository:defaultAirflowTag' values
@@ -98,11 +98,11 @@ images:
     # must be not set .
     repository: ~
     tag: ~
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
   flower:
     repository: ~
     tag: ~
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
   statsd:
     repository: quay.io/prometheus/statsd-exporter
     tag: v0.26.0
@@ -426,7 +426,7 @@ fernetKey: ~
 fernetKeySecretName: ~
 
 # Flask secret key for Airflow Webserver: `[webserver] secret_key` in airflow.cfg
-webserverSecretKey: ~
+webserverSecretKey: 5e9f9fb0bf760fd065bfbafda2d3d798
 webserverSecretKeySecretName: ~
 
 # In order to use kerberos you need to create secret containing the keytab file
