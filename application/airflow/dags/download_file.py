@@ -5,10 +5,13 @@ import requests
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.providers.google.cloud.transfers.local_to_gcs import LocalFilesystemToGCSOperator
 
+from datahub_airflow_plugin.entities import Dataset, Urn
 
 default_args = {
     'owner': 'airflow',
     'start_date': datetime(2024, 3, 12),
+    'description': "An example DAG demonstrating the usage of DataHub's Airflow lineage backend.",
+
 }
 
 def download_file(url, filename):
@@ -42,6 +45,7 @@ with DAG('download_file', default_args=default_args, schedule_interval=None) as 
         src='legislaturas.csv',
         dst='legislaturas.csv',
         bucket='st-landing-bucket',
+        outlets=[Urn("urn:li:dataset:(urn:li:dataPlatform:gcs,st-landing-bucket%2Flegislaturas.csv,PROD)")]
     )
 
 
