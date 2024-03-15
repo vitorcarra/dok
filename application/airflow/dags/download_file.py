@@ -41,7 +41,7 @@ with DAG('download_file', default_args=default_args, schedule_interval=None) as 
         gcp_conn_id="gcp_conn_id",
         src='legislaturas.csv',
         dst='legislaturas.csv',
-        bucket='landing',
+        bucket='st-landing-bucket',
     )
 
 
