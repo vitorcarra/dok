@@ -42,6 +42,7 @@ with DAG('load_file_to_bigquery', default_args=default_args, schedule_interval=N
             'table_id': 'legislaturas',
             'project_name': 'study-341002'
         },
+        inlets=[Urn("urn:li:dataset:(urn:li:dataPlatform:gcs,st-landing-bucket/legislaturas.csv,PROD)")],
         outlets=[Urn("urn:li:dataset:(urn:li:dataPlatform:bigquery,study-341002.data.legislaturas,PROD)")]
     )
 
