@@ -48,4 +48,5 @@ with DAG('download_file', default_args=default_args, schedule_interval=None) as 
     start = DummyOperator(task_id='start')
     end = DummyOperator(task_id='end')
 
-    start >> download_legislaturas >> download_deputados >> end
+    start >> download_legislaturas >> upload_file >> end
+    start >> download_deputados >> end
