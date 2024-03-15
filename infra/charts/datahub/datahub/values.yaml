@@ -65,7 +65,7 @@ datahub-frontend:
   #   type: ClusterIP
 
 acryl-datahub-actions:
-  enabled: false
+  enabled: true
   image:
     repository: acryldata/datahub-actions
     tag: "v0.0.13"
@@ -115,7 +115,7 @@ datahub-mce-consumer:
       memory: 256Mi
 
 datahub-ingestion-cron:
-  enabled: false
+  enabled: true
   image:
     repository: acryldata/datahub-ingestion
     # tag: "v0.11.0" # defaults to .global.datahub.version
