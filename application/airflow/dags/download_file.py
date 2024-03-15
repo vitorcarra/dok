@@ -20,7 +20,7 @@ with DAG('download_file', default_args=default_args, schedule_interval=None) as 
         task_id='download_legislaturas',
         python_callable=download_file,
         op_kwargs={
-            'url': 'https://dadosabertos.camara.leg.br/arquivos/legislaturas/csv/legislaturas.csv',
+            'url': 'http://dadosabertos.camara.leg.br/arquivos/legislaturas/csv/legislaturas.csv',
             'filename': 'legislaturas.csv',
         }
     )
@@ -29,7 +29,7 @@ with DAG('download_file', default_args=default_args, schedule_interval=None) as 
         task_id='download_deputados',
         python_callable=download_file,
         op_kwargs={
-            'url': 'https://dadosabertos.camara.leg.br/arquivos/deputados/csv/deputados.csv',
+            'url': 'http://dadosabertos.camara.leg.br/arquivos/deputados/csv/deputados.csv',
             'filename': 'deputados.csv',
         }
     )
