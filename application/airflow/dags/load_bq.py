@@ -26,7 +26,6 @@ def load_gcs_to_bigquery(bucket_name, source_object, dataset_id, table_id, proje
         source_format='CSV',
         autodetect=True,
         write_disposition='WRITE_TRUNCATE',
-        schema_update_options=['ALLOW_FIELD_ADDITION'],
         source_uris=['gs://st-landing-bucket/legislaturas.csv']
     )
 
