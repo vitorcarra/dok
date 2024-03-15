@@ -1,7 +1,6 @@
 from datetime import datetime
 from airflow import DAG
-from airflow.providers.google.cloud.operators.bigquery import BigQueryExecuteQueryOperator
-from airflow.providers.google.cloud.operators.gcs import GCSToBigQueryOperator
+from airflow.providers.google.cloud.transfers.gcs_to_bigquery import GCSToBigQueryOperator
 
 default_args = {
     'start_date': datetime(2024, 3, 1),
