@@ -28,9 +28,9 @@ with DAG('download_file_and_upload_to_s3', default_args=default_args, schedule_i
 
     upload_to_s3 = S3CreateObjectOperator(
         task_id='upload_to_s3',
-        bucket_name='your-bucket',
-        object_name='deputados.csv',
-        filename="{{ task_instance.xcom_pull(task_ids='download_deputados') }}",
+        s3_bucket='landing',
+        s3_key='deputados.csv',
+        data="{{ task_instance.xcom_pull(task_ids='download_deputados') }}",
         aws_conn_id='aws_s3_conn'
     )
 
