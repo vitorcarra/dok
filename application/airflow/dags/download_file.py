@@ -11,7 +11,7 @@ default_args = {
 
 def download_file(url, filename):
     response = requests.get(url)
-    print(response)
+    print(response.content)
     with open(filename, 'wb') as f:
         f.write(response.content)
 
