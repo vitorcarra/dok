@@ -1,17 +1,37 @@
 from airflow import DAG
-from airflow.operators.python import PythonOperator
+from airflow.operators.python_operator import PythonOperator
+from airflow.providers.amazon.aws.operators.s3_create_object import S3CreateObjectOperator
 from datetime import datetime
+import requests
 
-def print_hello():
-    print("Hello")
+default_args = {
+    'owner': 'airflow',
+    'start_date': datetime(2024, 3, 12),
+}
 
-with DAG(
-    dag_id="hello_dag",
-    start_date=datetime(2022, 1, 1),
-    schedule_interval="@daily",
-    catchup=False,
-) as dag:
-    task = PythonOperator(
-        task_id="print_hello_task",
-        python_callable=print_hello,
+def download_file(url, filename):
+    response = requests.get(url)
+    with open(filename, 'wb') as f:
+        f.write(response.content)
+    return filename
+
+with DAG('download_file_and_upload_to_s3', default_args=default_args, schedule_interval=None) as dag:
+    download_deputados = PythonOperator(
+        task_id='download_deputados',
+        python_callable=download_file,
+        op_kwargs={
+            'url': 'https://dadosabertos.camara.leg.br/arquivos/deputados/csv/deputados.csv',
+            'filename': '/tmp/deputados.csv',
+        },
+        do_xcom_push=True
     )
+
+    upload_to_s3 = S3CreateObjectOperator(
+        task_id='upload_to_s3',
+        bucket_name='your-bucket',
+        object_name='deputados.csv',
+        filename="{{ task_instance.xcom_pull(task_ids='download_deputados') }}",
+        aws_conn_id='aws_s3_conn'
+    )
+
+    download_deputados >> upload_to_s3
