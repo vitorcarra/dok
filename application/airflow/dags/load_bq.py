@@ -2,6 +2,8 @@ from datetime import datetime
 from airflow import DAG
 from airflow.providers.google.cloud.transfers.gcs_to_bigquery import GCSToBigQueryOperator
 
+from airflow.operators.dummy_operator import DummyOperator
+
 default_args = {
     'start_date': datetime(2024, 3, 1),
     'retries': 3,
@@ -25,4 +27,7 @@ with DAG(
 
     )
 
-    load_to_bigquery
+    start = DummyOperator(task_id='start')
+    end = DummyOperator(task_id='end')
+
+    start >> load_to_bigquery >> end
