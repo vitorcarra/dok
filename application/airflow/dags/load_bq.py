@@ -5,7 +5,6 @@ from airflow.providers.google.cloud.transfers.gcs_to_bigquery import GCSToBigQue
 default_args = {
     'start_date': datetime(2024, 3, 1),
     'retries': 3,
-    'retry_delay': timedelta(minutes=5),
 }
 
 with DAG(
