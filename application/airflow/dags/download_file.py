@@ -3,6 +3,8 @@ from airflow.operators.python_operator import PythonOperator
 from datetime import datetime
 import requests
 from airflow.operators.dummy_operator import DummyOperator
+from airflow.providers.google.cloud.transfers.local_to_gcs import LocalFilesystemToGCSOperator
+
 
 default_args = {
     'owner': 'airflow',
@@ -32,6 +34,14 @@ with DAG('download_file', default_args=default_args, schedule_interval=None) as 
             'url': 'http://dadosabertos.camara.leg.br/arquivos/deputados/csv/deputados.csv',
             'filename': 'deputados.csv',
         }
+    )
+
+    upload_file = LocalFilesystemToGCSOperator(
+        task_id="upload_file",
+        gcp_conn_id="gcp_conn_id",
+        src='legislaturas.csv',
+        dst='legislaturas.csv',
+        bucket='landing',
     )
 
 
