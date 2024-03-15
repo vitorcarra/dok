@@ -1,6 +1,6 @@
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
-from airflow.providers.amazon.aws.operators.s3_create_object import S3CreateObjectOperator
+from airflow.providers.amazon.aws.operators.s3 import S3CreateObjectOperator
 from datetime import datetime
 import requests
 
