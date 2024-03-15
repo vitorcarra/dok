@@ -22,13 +22,12 @@ def load_gcs_to_bigquery(bucket_name, source_object, dataset_id, table_id, proje
 
     # Load the local file to BigQuery
     bigquery_hook.run_load(
-        '/tmp/temp_file.csv',
-        destination_project_dataset_table=f'{project_name}.{dataset_id}',
-        table_id=table_id,
+        destination_project_dataset_table=f'{project_name}.{dataset_id}.{table_id}',
         source_format='CSV',
         autodetect=True,
         write_disposition='WRITE_TRUNCATE',
         schema_update_options=['ALLOW_FIELD_ADDITION'],
+        source_uris=['gs://st-landing-bucket/legislaturas.csv']
     )
 
 with DAG('load_file_to_bigquery', default_args=default_args, schedule_interval=None) as dag:
