@@ -2,6 +2,7 @@ from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from datetime import datetime
 import requests
+from airflow.operators.dummy_operator import DummyOperator
 
 default_args = {
     'owner': 'airflow',
@@ -32,4 +33,8 @@ with DAG('download_file', default_args=default_args, schedule_interval=None) as 
         }
     )
 
-    download_legislaturas >> download_deputados
+
+    start = DummyOperator(task_id='start')
+    end = DummyOperator(task_id='end')
+
+    start >> download_legislaturas >> download_deputados >> end
