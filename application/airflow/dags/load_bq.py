@@ -22,6 +22,9 @@ with DAG(
         destination_project_dataset_table='study-341002.data.legislatura',
         write_disposition='WRITE_TRUNCATE',
         autodetect=True,
+        gcp_conn_id='gcp_conn_id',
+
+
     )
 
     load_to_bigquery
