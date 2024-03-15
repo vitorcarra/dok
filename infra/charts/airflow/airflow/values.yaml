@@ -2336,7 +2336,7 @@ postgresql:
 config:
   datahub:
     enabled: 'True'
-    conn_id: datahub_rest_default
+    conn_id: 'datahub_rest_default'
   core:
     lazy_load_plugins: 'False'
     dags_folder: '{{ include "airflow_dags" . }}'
