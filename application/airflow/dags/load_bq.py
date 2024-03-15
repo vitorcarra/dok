@@ -26,7 +26,8 @@ def load_gcs_to_bigquery(bucket_name, source_object, dataset_id, table_id, proje
         source_format='CSV',
         autodetect=True,
         write_disposition='WRITE_TRUNCATE',
-        source_uris=['gs://st-landing-bucket/legislaturas.csv']
+        source_uris=['gs://st-landing-bucket/legislaturas.csv'],
+        field_delimiter=';',
     )
 
 with DAG('load_file_to_bigquery', default_args=default_args, schedule_interval=None) as dag:
