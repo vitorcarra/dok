@@ -4,6 +4,7 @@ from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import PythonOperator
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
 from airflow.providers.google.cloud.hooks.bigquery import BigQueryHook
+from datahub_airflow_plugin.entities import Dataset, Urn
 
 default_args = {
     'owner': 'airflow',
@@ -40,7 +41,8 @@ with DAG('load_file_to_bigquery', default_args=default_args, schedule_interval=N
             'dataset_id': 'data',
             'table_id': 'legislaturas',
             'project_name': 'study-341002'
-        }
+        },
+        outlets=[Urn("urn:li:dataset:(urn:li:dataPlatform:bigquery,study-341002.data.legislaturas,PROD)")]
     )
 
     start = DummyOperator(task_id='start')
