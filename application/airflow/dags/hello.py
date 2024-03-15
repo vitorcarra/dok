@@ -30,7 +30,7 @@ with DAG('download_file_and_upload_to_s3', default_args=default_args, schedule_i
         task_id='upload_to_s3',
         s3_bucket='landing',
         s3_key='deputados.csv',
-        data="{{ task_instance.xcom_pull(task_ids='download_deputados') }}",
+        data="testando",
         aws_conn_id='aws_s3_conn'
     )
 
