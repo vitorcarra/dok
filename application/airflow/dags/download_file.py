@@ -48,6 +48,15 @@ with DAG('download_file', default_args=default_args, schedule_interval=None) as 
         outlets=[Urn("urn:li:dataset:(urn:li:dataPlatform:gcs,st-landing-bucket/legislaturas.csv,PROD)")]
     )
 
+    upload_file_d = LocalFilesystemToGCSOperator(
+        task_id="upload_file",
+        gcp_conn_id="gcp_conn_id",
+        src='deputados.csv',
+        dst='deputados.csv',
+        bucket='st-landing-bucket',
+        outlets=[Urn("urn:li:dataset:(urn:li:dataPlatform:gcs,st-landing-bucket/legislaturas.csv,PROD)")]
+    )
+
 
     start = DummyOperator(task_id='start')
     end = DummyOperator(task_id='end')
