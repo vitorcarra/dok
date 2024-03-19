@@ -23,22 +23,17 @@ models:
   - name: legislaturas_cleaned
     description: "A cleaned version of the legislaturas table"
     columns:
-      - name: id
+      - name: id_legislatura
         description: "The primary key for this table"
         tests:
           - unique
-      - name: name
+      - name: sigla_casa
         description: "The name of the legislatura"
         tests:
           - not_null
-      - name: start_date
+      - name: num_legislatura
         description: "The start date of the legislatura"
         tests:
           - not_null
-      - name: end_date
+      - name: data_inicio
         description: "The end date of the legislatura"
-      - name: status
-        description: "The status of the legislatura"
-        tests:
-          - accepted_values:
-              values: ["active", "inactive"]
