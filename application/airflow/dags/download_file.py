@@ -49,7 +49,7 @@ with DAG('download_file', default_args=default_args, schedule_interval=None) as 
     )
 
     upload_file_d = LocalFilesystemToGCSOperator(
-        task_id="upload_file",
+        task_id="upload_file_deputados",
         gcp_conn_id="gcp_conn_id",
         src='deputados.csv',
         dst='deputados.csv',
@@ -62,4 +62,4 @@ with DAG('download_file', default_args=default_args, schedule_interval=None) as 
     end = DummyOperator(task_id='end')
 
     start >> download_legislaturas >> upload_file >> end
-    start >> download_deputados >> end
+    start >> download_deputados >> upload_file_d >> end
