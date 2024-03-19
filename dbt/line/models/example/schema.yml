@@ -19,3 +19,14 @@ models:
     columns:
       - name: id
         description: "The primary key for this table"
+
+  - name: legislaturas_cleaned
+    description: "A cleaned version of the legislaturas table"
+    tests:
+      - unique:
+          columns: id
+      - not_null:
+          columns: [id, name, start_date, end_date]
+      - accepted_values:
+          column: status
+          values: ['active', 'inactive']
