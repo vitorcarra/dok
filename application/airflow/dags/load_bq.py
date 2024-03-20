@@ -46,7 +46,23 @@ with DAG('load_file_to_bigquery', default_args=default_args, schedule_interval=N
         outlets=[Urn("urn:li:dataset:(urn:li:dataPlatform:bigquery,study-341002.data.legislaturas,PROD)")]
     )
 
+
+    load_to_bigquery_d = PythonOperator(
+        task_id='load_to_bigquery_deputados',
+        python_callable=load_gcs_to_bigquery,
+        op_kwargs={
+            'bucket_name': 'st-landing-bucket',
+            'source_object': 'deputados.csv',
+            'dataset_id': 'data',
+            'table_id': 'deputados',
+            'project_name': 'study-341002'
+        },
+        inlets=[Urn("urn:li:dataset:(urn:li:dataPlatform:gcs,st-landing-bucket/deputados.csv,PROD)")],
+        outlets=[Urn("urn:li:dataset:(urn:li:dataPlatform:bigquery,study-341002.data.deputados,PROD)")]
+    )
+
     start = DummyOperator(task_id='start')
     end = DummyOperator(task_id='end')
 
     start >> load_to_bigquery >> end
+    start >> load_to_bigquery_d >> end

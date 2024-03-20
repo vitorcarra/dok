@@ -54,7 +54,7 @@ with DAG('download_file', default_args=default_args, schedule_interval=None) as 
         src='deputados.csv',
         dst='deputados.csv',
         bucket='st-landing-bucket',
-        outlets=[Urn("urn:li:dataset:(urn:li:dataPlatform:gcs,st-landing-bucket/legislaturas.csv,PROD)")]
+        outlets=[Urn("urn:li:dataset:(urn:li:dataPlatform:gcs,st-landing-bucket/deputados.csv,PROD)")]
     )
 
 
